@@ -1,0 +1,24 @@
+{
+  "name": "y",
+  "version": "1.0.0",
+  "description": "Manages administrative functions of the canada's api store",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ised-isde-canada/apican.git"
+  },
+  "keywords": [
+    "api",
+    "canada",
+    "ISED"
+  ],
+  "author": "Franck Binard",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ised-isde-canada/apican/issues"
+  },
+  "homepage": "https://github.com/ised-isde-canada/apican#readme"
+}
