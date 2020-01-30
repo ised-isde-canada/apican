@@ -6,7 +6,7 @@
  *
  * Application APICan
  * -------------------------------------
- *  app.js : entry point
+ *  app.js : application entry point
  *
  * server code compile with browserify into public/javascripts/bundle.js
  * view system is handlebars (see src/server/viewEngine.js)
@@ -18,40 +18,16 @@
 /*****************************************************************************/
 
 require('module-alias/register')
-const winston = require('winston')
-const appLogger = winston.createLogger({
-    format: winston.format.json(),
-    transports: [
-        new winston.transports.Console(),
-        new winston.transports.File({
-            filename: 'info.log'
-        })
-    ]
-});
 
-const createError = require('http-errors')
-const Keycloak = require('keycloak-connect')
-const session = require('express-session')
-
-const path = require('path')
-
-const appStatus = require('@server/appStatus').appStatus
-const tenantsManager = require('@services/tenantsManager').tenantsManager
-const scheduler = require('@src/cron/timer.js').scheduler
-const appEvents = require('@server/appEvents').appEvents
-
+const security = require('@src/security').security
+const appStatus = require('@src/appStatus').appStatus                    //boot configuration data
 const db = require('@server/db').appDatabase
-
-const APICan = require('@src/APICan').APICan
-
-
-const users = require('@users/users').users
-const groups = require('@users/groups').groups
+const apiCanApp = require('@src/apiCanApp').apiCanApp( appStatus )
 
 db.configure({
         filePath: './settings.db'
     }) //access the database
-    .then(APICan.configure) //configure the application engine
+    .then(bootReport => APICanApp.configure (bootReport)) //configure the application engine
     .then(users.onReady)
     .then(groups.onReady)
     .then(appStatus.enableKeyCloak())
