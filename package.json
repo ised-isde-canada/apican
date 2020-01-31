@@ -4,7 +4,17 @@
   "description": "Manages administrative functions of the canada's api store",
   "main": "app.js",
   "scripts": {
+    "start": "node ./app.js",
+    "devClient": "watchify ./src/client/main.js -o ./public/javascripts/bundle.js",
+    "devServer": "nodemon ./app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "_moduleAliases": {
+    "@src": "src",
+    "@server": "src/server",
+    "@apiCan": "src/apiCan",
+    "@users": "src/users",
+    "@security": "src/security"
   },
   "repository": {
     "type": "git",
@@ -13,6 +23,9 @@
   "keywords": [
     "api",
     "canada",
+    "store",
+    "canada",
+    "rest",
     "ISED"
   ],
   "author": "Franck Binard",
@@ -20,5 +33,14 @@
   "bugs": {
     "url": "https://github.com/ised-isde-canada/apican/issues"
   },
-  "homepage": "https://github.com/ised-isde-canada/apican#readme"
+  "homepage": "https://github.com/ised-isde-canada/apican#readme",
+  "dependencies": {
+    "config": "^3.2.5",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "express-handlebars": "^3.1.0",
+    "module-alias": "^2.2.2",
+    "moment": "^2.24.0",
+    "request": "^2.88.0"
+  }
 }
