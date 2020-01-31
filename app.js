@@ -29,8 +29,10 @@
 /*****************************************************************************/
 require('module-alias/register')    //uses aliases to express paths to modules in src
 /*****************************************************************************/
-const appFeatures   = require('@apiCan/appfeatures').appFeatures
-const errors        = require('@errors/error').errors
+const appFeatures   = require('@apiCan/appFeatures').appFeatures
+const errors        = require('@errors/error').errors({
+    appFeatures
+})
 const report        = require('@report/report').report
 const security      = require('@security/security').security 
 /*****************************************************************************/
