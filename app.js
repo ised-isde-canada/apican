@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 
 /*******************************************************************************
- * Franck Binard, Innovation Science and Economic Development Canada (ISED)
- * franck.binard@canada.ca
- * 
  * Canadian Gov. API Store Management Software - written in 2020
  * Application APICan
  * Manages GoC API Store (https://api.canada.ca/)
+ * 
+ * 2020 - Franck Binard, Innovation Science and Economic Development Canada (ISED)
+ *      - Don Vo, Innovation Science and Economic Development Canada (ISED)
  * -----------------------------------------------------------------------------
  *  app.js : application entry point, doesn't export anything
  *
@@ -21,8 +21,23 @@
  * - mongodb database
  *
  * Security: 
- * - does not store any user information
+ * - uses keycloak authentication
+ *   does not store any user information
  * - only accepts requests from whitelisted ips
+ * 
+ * Code tree: 
+ * src
+ * src/server
+ * - httpServer
+ * - routingSystem
+ * src/user
+ * src/client
+ * - main.js
+ * src/apiCan
+ * - appFeatures
+ * - appStatus
+ * src/security
+ * src/errors
  ******************************************************************************/
 "use strict"
 
@@ -43,7 +58,7 @@ const appStatus = require('@apiCan/appStatus').appStatus({
     errors
 }                
 /*****************************************************************************/
-
+//boot server
 const path = require('path')
 const httpServer    = ('@server/httpServer').httpServer({
     rootPath    : path.join( __dirname ) 
