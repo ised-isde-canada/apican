@@ -44,7 +44,9 @@
 /*****************************************************************************/
 require('module-alias/register')    //uses aliases to express paths to modules in src
 /*****************************************************************************/
+const appData       = require('@apiCan/appData').appData
 const appFeatures   = require('@apiCan/appFeatures').appFeatures
+
 const errors        = require('@errors/error').errors({
     appFeatures
 })
@@ -73,10 +75,9 @@ const apiCanApp     = require('@apiCan/apiCanApp').apiCanApp( {
 }) 
 
 /*****************************************************************************/
-const appData       = require('@apiCan/appData').appData
-appData.spark( appStatus )                                     //get the app's configuration data
-    .then( bootReport => apiCanApp.boot( bootReport ))  //start
-    .then( bootReport => apiCanApp.run( bootReport ))   //application run
+appStatus.spark( appData )                                     //get the app's configuration data
+    .then( bootReport => apiCanApp.boot( bootReport ))         //start
+    .then( bootReport => apiCanApp.run( bootReport ))          //application run
     .catch ( errors.handler )
 /******************************************************************************/
 /******************************************************************************

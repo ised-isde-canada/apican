@@ -32,16 +32,12 @@ const tenants = (function() {
                     adminDomain : tenantJSONInfo.admin_domain
                 })
 
-                this.lastUpdateTime = "not updated"
-
-                this.maintainers = lang => {
-                    return lang ? this.maintainersEn : this.maintainersFr)
-                }
-                this.domain = tenantJSONInfo.domain
-                this.tenantDescription = lang => {
-                    return lang ? tenantJSONInfo.description_en : tenantJSONInfo.description_fr
-                }
                 this.accounts = new Map() //indexed by email addresses
+
+                this.lastUpdateTime = "not updated"
+                this.maintainers = lang => lang ? this.maintainersEn : this.maintainersFr
+                this.tenantDescription = lang => lang ? tenantJSONInfo.description_en : tenantJSONInfo.description_fr
+                this.domain = tenantJSONInfo.domain
                 this.visibleServices = []
 
                 this.baseURL = `https://${this.adminDomain}/admin/api/`
@@ -71,25 +67,7 @@ tenants.Tenant.prototype.publicAPIList = function(language) {
         this.services.filter(
             service => service.documentation.size >= 2
         )
-    let returnedAPIs = billingualApis.filter(
-        service => {
-            if (!('features' in service)) return true
-            let serviceFeatures = service.features.filter(feature =>{
-                return feature.scope === "service_plan"
-            } )
-            if (serviceFeatures.length === 0) return true
-            return false
-        })
-    let listOfApis = []
-    returnedAPIs.forEach(
-        service => {
-            //checks if there is a valid set of documentation 
-            //attached to this service
-            let apiDesc = service.outputAPIDescription(language)
-            if (apiDesc) listOfApis.push(apiDesc)
-        }
-    )
-    return listOfApis
+   return... 
 }
 
 tenants.Tenant.prototype.getAccountPlan = function(planInfo, userEmail) {
