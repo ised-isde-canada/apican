@@ -10,11 +10,12 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "_moduleAliases": {
-    "@src": "src",
-    "@server": "src/server",
-    "@apiCan": "src/apiCan",
-    "@users": "src/users",
-    "@security": "src/security"
+    "@appData": "src/server/appEngine.js",
+    "@appEngine": "src/server/appEngine",
+    "@appRoot": "src/server/routes/appRoot", 
+    "@express":   "src/server/express.js", 
+    "@features": "src/common/features.js", 
+    "@server": "src/server"
   },
   "repository": {
     "type": "git",
