@@ -7,6 +7,7 @@ APICan interacts with the following connected systems:
 - Jira (Atlassian) for support requests
 - keyCloak for authentication
 - 3Scale for tenant management
+- The canada API store, hosted on a drupal platform
 
 It provides various tools to api store administrators within and outside ISED that facilitate the management of the Canada API store with respect to its various components, including: 
 
