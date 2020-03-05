@@ -21,6 +21,7 @@ const app = {
 }
 require('@features').addFeatureSystem( app )
 /******************************************************************************/
+.then( require('@appData').loadLocalAppData   )//app data
 .then( require('@appEngine').addAppEngine     )//app mechanics
 .finally ( _ => app.run() )
 /******************************************************************************

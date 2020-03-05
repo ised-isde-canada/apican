@@ -10,7 +10,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "_moduleAliases": {
-    "@appData": "src/server/appEngine.js",
+    "@appData": "src/server/appData.js",
     "@appEngine": "src/server/appEngine",
     "@appRoot": "src/server/routes/appRoot", 
     "@express":   "src/server/express.js", 

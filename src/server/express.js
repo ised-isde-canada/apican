@@ -16,7 +16,8 @@ const expressStack = function( app ) {
     app.express.use(express.urlencoded({
         extended: false
     }))
-    app.addFeature({label: 'express'})
+    app.addFeature({label: 'express'})   
+    app.express.use(express.static( app.staticFolder))
     return app
 }
 
