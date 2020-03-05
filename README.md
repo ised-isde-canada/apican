@@ -17,32 +17,29 @@ It provides various tools to api store administrators within and outside ISED th
 
 
  * Front-end: 
- * - js code compiles with browserify into public/javascripts/bundle.js
- * - js code for front-end is in ./src/client, uses jquery and 
- *   a other front-end libraries (see ./view/partials/head/jsLibraries)
- * - template engine is handlebars, templates are stored in ./views
- *
+  - js code compiles with browserify into public/javascripts/bundle.js
+  - js code for front-end is in ./src/client, uses jquery and 
+    a other front-end libraries (see ./view/partials/head/jsLibraries)
+  - template engine is handlebars, templates are stored in ./views
+ 
  * Back-end: 
- * - uses an express stack
- * - mongodb database
- *
+  - uses an express stack
+ 
  * Security: 
  * - uses keycloak authentication
  *   does not store any user information
  * - only accepts requests from whitelisted ips
- * 
+  
  * Code tree: 
- * src
- * src/server
- * - httpServer
- * - routingSystem
- * src/user
- * src/client
- * - main.js
- * src/apiCan
- * - appFeatures
- * - appStatus
- * src/security
- * src/errors
- ******************************************************************************/
-"
+ 
+  src/server
+  - httpServer
+  - routingSystem
+  src/client
+  - main.js
+  src/common
+  - appFeatures
+  - appStatus
+  src/security
+  src/errors
+ 
