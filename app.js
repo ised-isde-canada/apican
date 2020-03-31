@@ -24,8 +24,12 @@ const app = {
 
 require('@common/features').addFeatureSystem( app )
 require('@server/appData').getAppData( app )
+require('@server/server').setAppServer( app )
+require('@server/engine').mountAppEngine( app )
+.then( app => {
+	app.run()
+})
 /******************************************************************************/
-debugger
 /******************************************************************************
  * end entry point
  ******************************************************************************/
