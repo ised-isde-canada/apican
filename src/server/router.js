@@ -1,13 +1,20 @@
 "use strict"
 
 const express = require('express')
+//information on tenants passed to the front end
+const tenantInfo  = app => app.tenants.list.map(t => {
+   return {
+       name: t.name,
+       id: t.id
+      }
+   })
+
 
 const appRoot = function (app){
    return (req, res, next) =>{
-      console.log( app )
       let pageData = {
-       title: app.metadata.name,
-       tenants: app.tenants.list 
+         title: app.metadata.name,
+         tenants: tenantInfo( app ) 
       }
       res.render('index', pageData)
    } 

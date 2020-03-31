@@ -1,0 +1,221 @@
+
+:root {
+  --mainColor: rgb(119, 131, 172);
+  --formBackground: rgb(32, 88, 88);
+  --comp1: #1982C4;
+  --snap: #F8B32E; 
+  --pop: #5acac6;
+  --crackle: #363133;
+}
+html {
+  scroll-behavior: smooth;
+  }
+
+html,body,h1,h2,h3,h4,h5 {
+  font-family: "Raleway", sans-serif;
+  color: var(--pop);
+}
+#leftNav {
+  background-color  : var(--pop);
+  width             :250px; 
+  color           :white;
+  text-decoration:bold;
+  font-size: 1em;
+  height:100%; 
+  overflow: auto;
+}
+#leftNav h2{
+  color: var(--comp1);
+  border-top: 1px inset var(--snap)
+}
+div.appContent {
+  margin-left: 250px;
+  margin-top: 50px;
+  padding: 1px 16px;
+  height: 1000px;
+}
+.appContent h2 {
+  background-color: var(--crackle); 
+}
+#tenantCards {
+  width:50%
+}
+
+#apiInspectSection {
+  width:50%
+}
+
+@media screen and (max-width: 1200px) {
+  #leftNav{
+    display:none;
+    width: 100%;
+    height: auto;
+    position: relative;
+  }
+  #sidebar a {float: left;}
+  .topNav {
+    display:block; 
+  }
+  div.appContent {
+    margin-left: 0px;
+  }
+  #tenantCards {
+    width:100%
+  }
+  #apiInspectSection {
+    width: 100%
+  }
+}
+
+@media screen and (max-width: 1200px) {
+   #leftNav a {
+    text-align: center;
+    float: none;
+  }
+}
+
+#topNav {
+  z-index: 4;
+  background-color: var(--crackle);
+}
+#topNav button{
+    color: var(--pop) ;
+}
+.flex-container{
+  display:flex;
+  flex-wrap: wrap;  
+}
+
+#userFormGroupList{
+  width:100%
+}
+.apiCanModal{
+  background-color: var(--formBackground);
+}
+
+.apiCanModal header {
+  color: var(--crackle);
+}
+.modalContent{
+  color:var(--pop);
+}
+.groupCreationLabel{
+  color: var(--mainColor);
+}
+
+.tenant-card {
+  border: black 1 px;
+  background-color: var(--snap);
+  height:50px; 
+  color: white;  
+  font-family: "Raleway", sans-serif;
+  font-size:1.2em; 
+}
+
+.loader {
+    border: 16px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 16px solid #3498db;
+    width: 100px;
+    height: 100px;
+    -webkit-animation: spin 2s linear infinite; /* Safari */
+    animation: spin 2s linear infinite;
+  }
+
+.tenantSelection{
+    width:120px; 
+    text-align:right 
+}
+.eventList {
+  width: 100%; 
+  background-color: var(--comp1);
+}
+
+
+.scheduledEvent {
+  cursor        : pointer;
+  font-size     : 1.1em; 
+  padding-left  : 15px;
+  margin-bottom : 10px;  
+  border: 1px inset var(--mainColor); 
+  background-color: var(--crackle); 
+  color: var(--pop); 
+}
+
+#appStatus {
+  cursor: pointer;
+  background-color: var(--crackle); 
+  color: var(--pop); 
+  transition: 0.4s; 
+}
+
+#appStatus:hover{
+  background-color: var(--mainColor)
+}
+
+#appStatusDetail {
+  padding: 0 18px; 
+  background-color: white; 
+  max-height: 0;
+  width:100%;
+  overflow: hidden; 
+  transition: max-height 0.2s ease-out; 
+}
+
+.leftNavItem:hover{
+  background-color:yellow !important;
+}
+
+.leftNavIcon {
+  color: white
+}
+.groupLeftNavLink a {
+  color: var(--mainColor);
+  text-decoration: none;
+  font-size:1.2em; 
+}
+
+.groupCmd {
+    cursor: pointer
+ }
+
+.settingsItem {
+  cursor: pointer
+}
+
+.service_plan, .application_plan {
+  margin-bottom: 5px;
+  width: 100%; 
+  border: black inset 1px; 
+  padding-right: 2px; 
+  padding-left: 5px; 
+
+}
+
+.service_plan, .application_plan h3{
+  color: black
+}
+.service_plan {
+  background-color: var(--mainColor); 
+}
+.service_plan::before {
+  content: 'Service Plan'
+}
+
+.application_plan {
+  background-color: var(--snap)
+}
+.application_plan::before {
+  content: 'Application Plan'
+}
+
+  /* Safari */
+  @-webkit-keyframes spin {
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); }
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+    <title>{{title}}</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, maximum-scale=1.0, initial-scale=1">
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.min.js"></script>
+
+
+    
+  <body class='w3-light-grey'>
+    <div class="w3-bar w3-top w3-large" id="topNav">
+         <button class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey" onclick="w3_open();">
+          <i class="fa fa-bars"></i>  Menu
+        </button>
+        
+	       <button class="w3-bar-item w3-button w3-hover-none w3-hover-text-light-grey" id="showScheduler">
+          <i class="fa fa-clock-o" class='w3-xxxlarge' style="color:red"></i>  
+        </button> 
+        <button class="w3-bar-item w3-button w3-hover-none w3-hover-text-light-grey" id="jiraRequestTopNavCmd">
+            Jira Requests Setup
+        </button> 
+
+         <button class="w3-bar-item w3-button w3-hover-none w3-hover-text-light-grey">
+           keycloak setup 
+        </button> 
+        
+    
+        {{>topNav/appStatus}}
+        {{>topNav/tenantInfoRefresh}}
+    </div>
+
+    {{>navBottom}}
+    {{>leftNav/navBar}}
+    {{>modal}}
+
+
+<div class="appContent">
+    {{{body}}}
+</div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/javascripts/sortable.js"></script>
+  <script>
+    // Example 1 - Simple list
+new Sortable(example1, {
+  group: 'shared',
+	animation: 150,
+	ghostClass: 'blue-background-class'
+});
+
+new Sortable(example2, {
+  group: 'shared',
+	animation: 150,
+	ghostClass: 'blue-background-class'
+});
+
+  </script>
+  <script src="/javascripts/bundle.js"></script>
+  </body>
+</html>
+

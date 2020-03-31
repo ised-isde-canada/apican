@@ -1,0 +1,29 @@
+{{>modalServiceInspect/frame}}
+<div ID='APIntel' style="width:100%; margin-left:10px">
+	<center><h2>Publishable APIs</h2></center>
+
+    <table ID="publishableAPIs" class="display" width="100%">
+        <thead>
+        <tr>
+            <th>name</th>
+            <th>id</th>
+            <th>tenant</th>
+            <th>public</th>
+        </tr>
+        </thead>
+        <tbody>
+	{{#each tenants}}
+		{{#each this.services}}
+            {{#if this.publishable}}
+             <tr class="serviceInspect">
+			    <td class="serviceName">{{this.name}}</td>
+                <td class="serviceID">{{this.id}}</td>
+                <td>{{this.tenant}}</td>
+                <td class="publicApi">{{this.public}}</td>
+            </tr>
+            {{/if}}
+        {{/each}}
+	{{/each}}
+    </tbody>
+    </table>
+</div>
