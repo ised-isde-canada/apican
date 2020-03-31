@@ -12,9 +12,9 @@
   "_moduleAliases": {
     "@appData": "src/server/appData.js",
     "@appEngine": "src/server/appEngine",
-    "@appRoot": "src/server/routes/appRoot", 
-    "@express":   "src/server/express.js", 
-    "@features": "src/common/features.js", 
+    "@appRoot": "src/server/routes/appRoot",
+    "@express": "src/server/express.js",
+    "@common": "src/common/",
     "@server": "src/server"
   },
   "repository": {
@@ -37,6 +37,7 @@
   "homepage": "https://github.com/ised-isde-canada/apican#readme",
   "dependencies": {
     "appversion": "^1.7.1",
+    "chai": "^4.2.0",
     "config": "^3.2.5",
     "cors": "^2.8.5",
     "express": "^4.17.1",

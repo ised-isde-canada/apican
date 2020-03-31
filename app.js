@@ -16,14 +16,16 @@
 require('module-alias/register')    //uses aliases to express paths to modules in src
 /*****************************************************************************/
 const app = {
-	name: 'apiCan', 
-	root: __dirname
+	metadata : {
+		name: 'apiCan', 
+		root: __dirname
+	}
 }
-require('@features').addFeatureSystem( app )
+
+require('@common/features').addFeatureSystem( app )
+require('@server/appData').getAppData( app )
 /******************************************************************************/
-.then( require('@appData').loadLocalAppData   )//app data
-.then( require('@appEngine').addAppEngine     )//app mechanics
-.finally ( _ => app.run() )
+debugger
 /******************************************************************************
  * end entry point
  ******************************************************************************/
