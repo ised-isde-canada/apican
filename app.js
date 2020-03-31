@@ -38,12 +38,7 @@ require('@server/engine').mountAppEngine( app )
 		frequency	: 10, 
 		run			: app.updateTenantInformation
 	}))
-		
-	if(app.routers && app.routers.length > 0){
-		app.routers.forEach( path => {
-			app.server.express.use( path.route, path.router )
-		})
-	}
+	require('@server/router').configureRoutes( app )
 	app.server.start()
 	app.say(`${app.metadata.name} now running`)
 })
