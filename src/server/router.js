@@ -22,8 +22,9 @@ const appRoot = function (app){
 
 const configureRoutes = function( app ) {
 
+   app.server.express.use('/userGroups', app.userGroups.router)
    //routing to the top level app
-    let router = express.Router()
+    let router = express.Router()    
     app.server.express.use('/', router)
     router.get('/', appRoot(app))
 }
