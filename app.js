@@ -26,10 +26,26 @@ const app = {
 
 require('@common/features').addFeatureSystem( app )
 require('@server/appData').getAppData( app )
+require('@tenants/tenantsManager').addTenantManagementModule( app )
+require('@common/time/chronos').addTimerFeature( app )
 require('@server/server').setAppServer( app )
 require('@server/engine').mountAppEngine( app )
 .then( app => {
-	app.run()
+
+	let Event = require('@common/time/events').Event
+	app.tools.createNewClock("tenant info refresh", new Event({
+		name		: 'tenant info refresh', 
+		frequency	: 10, 
+		run			: app.updateTenantInformation
+	}))
+		
+	if(app.routers && app.routers.length > 0){
+		app.routers.forEach( path => {
+			app.server.express.use( path.route, path.router )
+		})
+	}
+	app.server.start()
+	app.say(`${app.metadata.name} now running`)
 })
 /******************************************************************************/
 /******************************************************************************
