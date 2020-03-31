@@ -14,11 +14,13 @@
 "use strict"
 /*****************************************************************************/
 require('module-alias/register')    //uses aliases to express paths to modules in src
+const path = require('path')
 /*****************************************************************************/
 const app = {
 	metadata : {
-		name: 'apiCan', 
-		root: __dirname
+		name			 : 'apiCan', 
+		root			 : __dirname, 
+		staticFolderPath :  path.join(__dirname, 'public')
 	}
 }
 

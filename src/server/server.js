@@ -55,26 +55,9 @@ const onListening = function(addr) {
 }
 
 const _httpServer = function( app ) {
-    let express = require('express')
-    app.server = {
-        express: express()
-    } 
-    app.server.express.use(express.json())
-    app.server.express.use(express.urlencoded({
-        extended: false
-    }))
-    const hbs = require('express-handlebars')
-    app.server.express.engine('hbs', hbs({
-        extname: 'hbs', 
-        defaultLayout: 'main', 
-        layoutsDir: app.metadata.root + '/views/layouts/', 
-        partialsDir: app.metadata.root + '/views/partials/'
-    }))
-    app.server.express.set('view engine', 'hbs');
-   
-    
+    app.server = {}
+    require('@server/express').configureExpress( app )
     app.server.port =  process.env.PORT || 3000
-    app.server.express.set('port', app.server.port)
     let _server = http.createServer( app.server.express )
            
 
@@ -85,7 +68,9 @@ const _httpServer = function( app ) {
     return {
 
         start   : function(){
-            _server.listen(app.server.port)
+            _server.listen(app.server.port, err => {
+
+            })
            app.say(`App running on port ${app.server.port}`)
            
            return app 
