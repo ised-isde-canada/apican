@@ -1,9 +1,0 @@
-@import 'colors.css'; 
-@import 'ui.css';    
-
-#modalWindow header {
-    background-color : var(--sky);
-    color : var(--peaky)
-}
-
-
