@@ -18,9 +18,13 @@ const path = require('path')
 /*****************************************************************************/
 const app = {
 	metadata : {
-		name			 : 'apiCan', 
-		root			 : __dirname, 
-		staticFolderPath :  path.join(__dirname, 'public')
+		name			 		: 'apiCan', 
+		root			 		: __dirname, 
+		staticFolderPath 	:  path.join(__dirname, 'public') ,
+		localDatabaseName	: 'settings.db', 
+	}, 
+	healthCheck : {
+		localDatabase : false
 	}
 }
 
@@ -28,11 +32,21 @@ require('@common/features').addFeatureSystem( app )
 require('@server/appData').getAppData( app )
 require('@tenants/tenantsManager').addTenantManagementModule( app )
 require('@common/time/chronos').addTimerFeature( app )
-require('@server/server').setAppServer( app )
-require('@server/engine').mountAppEngine( app )
-.then( app => {
+require('@server/groups/userGroupFeature').addFeature( app )
+require('@server/server').setAppServer( 	app	)
+require('@server/engine').mountAppEngine( app	)	//returns a promise
+
+//now all async config operations
+.then(require('@server/db').mountLocalDatabase	)
+.then( app => { //run the app
+
+	app.say("******* App component status:")
+	Object.keys(app.healthCheck).forEach( key=> {
+		app.say(`${key}:${app.healthCheck[key]}`)
+	})
 
 	let Event = require('@common/time/events').Event
+
 	app.tools.createNewClock("tenant info refresh", new Event({
 		name		: 'tenant info refresh', 
 		frequency	: 10, 
