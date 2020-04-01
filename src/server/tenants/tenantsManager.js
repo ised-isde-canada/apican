@@ -14,16 +14,27 @@
 const moment = require('moment')
 const Tenant = require('@tenants/tenants').Tenant
 /**********************************************************************************/
-const updateTenantInformation = ( app, tenantsList ) => {
-   debugger 
+const updateTenantInformation = ( app, tenantsList = null ) => {
+    let _tenants = app.tenants.list
+
+    let tenantsToUpdate = tenantsList 
+        ? tenantsList.map(tName => _tenants.find(t => t.name === tName))
+        : /*all*/ _tenants
+
+    return Promise.all(tenantsToUpdate.map(tenant => {
+            return tenant.update()
+        }))
+        .then( updateReports => {
+            debugger
+        })
 }
+
 
 const tenantsManager = function( app ) {
 
     app.tenants.list.forEach( t => {
-        app.tenants.list.forEach( t => {
-        app.tenants.register.set(t.name, new Tenant(t))
-        })
+        let tObj = new Tenant(t)
+        app.tenants.register.set(t.name, tObj)
     })
 
     app.updateTenantInformation = tenantsList=> updateTenantInformation(app, tenantsList)

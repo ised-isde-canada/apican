@@ -35,9 +35,11 @@ require('@common/time/chronos').addTimerFeature( app )
 require('@server/groups/userGroupFeature').addFeature( app )
 require('@server/server').setAppServer( 	app	)
 require('@server/engine').mountAppEngine( app	)	//returns a promise
-
-//now all async config operations
 .then(require('@server/db').mountLocalDatabase	)
+.then(app => {
+	app.updateTenantInformation()
+	return app
+})
 .then( app => { //run the app
 
 	app.say("******* App component status:")
@@ -52,6 +54,8 @@ require('@server/engine').mountAppEngine( app	)	//returns a promise
 		frequency	: 10, 
 		run			: app.updateTenantInformation
 	}))
+	
+
 	require('@server/router').configureRoutes( app )
 	app.server.start()
 	app.say(`${app.metadata.name} now running`)
