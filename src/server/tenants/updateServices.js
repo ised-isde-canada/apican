@@ -26,10 +26,35 @@ const addServiceUpdateFeature = function(Tenant){
         return updateReport
     }
 
-
+    Tenant.prototype.validateAPIs = async function(tenantUpdateReport) {
+        //At this stage, we've fetched the list of services from this tenant and
+        //its set of documentation
+        //if either the service list fetch or the active doc fetch returned errors 
+        if (tenantUpdateReport.fetches.serviceList !== errors.codes.Ok ||
+            tenantUpdateReport.fetches.activeDocs !== errors.codes.Ok) {
+            //report a failed update
+            return tenantUpdateReport //update Failed
+        }
+    
+        //extract the services that have billingual documentation
+        //these are the only one worth fetching the features for
+        let billingualServicesReports = []
+        tenantUpdateReport.servicesUpdateReports.forEach(
+            serviceUpdateReport => {
+                if (serviceUpdateReport.languageUpdate.french === errors.codes.Ok &&
+                    serviceUpdateReport.languageUpdate.english === errors.codes.Ok) {
+                    billingualServicesReports.push(serviceUpdateReport)
+                } else {
+                    serviceUpdateReport.updateSuccess = errors.codes.Ok
+                }
+            })
+    
+    
+        return tenantUpdateReport
+    }
 
     Tenant.prototype.serviceListingUpdate = function( tenantUpdateReport ){
-        return this.getServiceList()
+        return this.getServiceList( tenantUpdateReport )
         .then( services => {
                return this.updateServiceDefinitions({
                     fetchedServices: services,
@@ -47,6 +72,7 @@ const addServiceUpdateFeature = function(Tenant){
             this.updateActiveDocs( tenantUpdateReport )  ])
 
         .then( updateResult  => {
+            return this.validateAPIs(tenantUpdateReport)
             debugger
         })
     }

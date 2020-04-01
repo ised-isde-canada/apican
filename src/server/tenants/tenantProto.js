@@ -10,6 +10,7 @@
 "use strict"
 /*****************************************************************************/
 const validator = require('validator')
+const errors = require('@errors').errors
 const ServiceRegister = require('@services/serviceRegister').ServiceRegister
 const alwaysResolve = require('@common/utils/alwaysResolve').alwaysResolve
 /*****************************************************************************/
