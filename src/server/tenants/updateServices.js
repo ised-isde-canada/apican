@@ -42,16 +42,10 @@ const addServiceUpdateFeature = function(Tenant){
     Tenant.prototype.update =  function(){
 
         let tenantUpdateReport = new errors.TenantUpdateReport(this.name)
+        return Promise.all([ 
+            this.serviceListingUpdate(tenantUpdateReport), 
+            this.updateActiveDocs( tenantUpdateReport )  ])
 
-        let activeDocsPromise = new Promise((resolve, reject) => {
-            this.getActiveDocsList(tenantUpdateReport)
-            .then(activeDocs => resolve(this.updateActiveDocs(activeDocs, tenantUpdateReport)))
-        })
-
-
-        return Promise.all([
-                this.serviceListingUpdate(tenantUpdateReport),
-                this.activeDocsPromise])
         .then( updateResult  => {
             debugger
         })

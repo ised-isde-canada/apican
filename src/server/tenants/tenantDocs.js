@@ -27,17 +27,31 @@ const activeDocsInterface = function(Tenant){
        })
     }
 
-    Tenant.prototype.updateActiveDocs = async function(apiDocsInfo, updateReport) {
    //if the document fetch operation resulted in an error, return here
-        if (updateReport.fetches.activeDocs !== errors.codes.Ok) return
-        apiDocsInfo.forEach( apiDocObject => {
-           if (apiDocObject.api_doc.published) {
-               this.services.updateServiceDocs(apiDocObject, updateReport)
-           }
+   /*     if (updateReport.fetches.activeDocs !== errors.codes.Ok) return
+     
        })
-    }
-}
+    }*/
 
+   Tenant.prototype.updateActiveDocs = function( tenantUpdateReport){
+       let that = this
+       return new Promise((resolve, reject) => {
+            this.getActiveDocsList( tenantUpdateReport )
+            .then(activeDocs => {
+                if(Array.isArray(activeDocs) && activeDocs.length > 0 ){
+                    activeDocs.forEach( apiDocObject => {
+                        if (apiDocObject.api_doc.published) {
+                            that.services.updateServiceDocs( apiDocObject, tenantUpdateReport)
+                        }
+                    })
+                    return resolve( tenantUpdateReport )
+                }
+                return resolve( tenantUpdateReport )
+            })
+        })
+    }
+
+}
 
 module.exports = {
     activeDocsInterface
