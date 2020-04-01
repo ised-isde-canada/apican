@@ -1,0 +1,47 @@
+<button onclick='openTenantPane("{{this.name}}Panel")' 
+		class="w3-block w3-left-align tenant-card" 
+		id="{{this.name}}TenantCard">
+            	{{this.name}}: &nbsp; Last Update: {{this.lastUpdate}}
+				&nbsp; total services: {{this.totalServiceCount}}
+	</button>
+
+		<div id="{{this.name}}Panel" class="w3-hide w3-container w3-light-grey">
+			<div class="w3-card ws-margin-16" ID="{{this.name}}">
+
+<div class="w3-bar w3-black">
+
+  <button class="w3-bar-item w3-button w3-red" 
+  	id="{{this.name}}ServicesTabLink" onclick="openTenantTab(event, '{{this.name}}', 'Services')">Services</button>
+
+  <button class="w3-bar-item w3-button" 
+  	id="{{this.name}}AccountsTabLink" 
+	  onclick="openTenantTab(event, '{{this.name}}', 'Accounts'); getTenantAccounts('{{this.name}}');">Accounts</button>
+
+  <button class="w3-bar-item w3-button" 
+  	id="{{this.name}}UsersTabLink" 
+	  onclick="openTenantTab(event, '{{this.name}}', 'Users');getTenantUsers('{{this.name}}')">Users</button>
+
+</div>
+
+			<div class="w3-container" id='{{this.name}}Services'>
+			<br/>	
+				{{>tenantServiceList}}
+			</div>
+
+			<div class="w3-container" id='{{this.name}}Accounts' style="display:none"> <!--account tab -->
+				{{>tenantAccountList}}
+			</div>
+
+
+			<div class="w3-container" id='{{this.name}}Users' style="display:none"> <!--user tab -->
+			{{>tenantAdminList}}
+			</div>
+
+			<footer class="w3-container w3-blue">
+			<div class="w3-center w3-padding-16"></div>
+			</footer>
+
+		</div>
+			
+		</div>
+	<br>	

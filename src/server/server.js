@@ -58,12 +58,11 @@ const _httpServer = function( app ) {
     app.server = {}
     require('@server/express').configureExpress( app )
     app.server.port =  process.env.PORT || 3000
-    let _server = http.createServer( app.server.express )
-           
 
+    let _server = http.createServer( app.server.express )
     _server.on('error'      , x => onError( app.port , x ))
     _server.on('listening'  , x => onListening( _server.address()))
-     
+    app.server.io = require('socket.io')(_server)
 
     return {
 

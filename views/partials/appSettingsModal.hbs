@@ -1,0 +1,24 @@
+<div id="appSettingsModal" class="w3-modal">
+    <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:1200px">
+
+      <header class="w3-container w3-blue">
+        <h1>Settings</h1>
+      </header>
+      
+      <div class="w3-container">
+        <div class ='w3-row'>
+
+          <div class='w3-col w3-container'>
+
+            <span onclick="document.getElementById('appSettingsModal').style.display='none'" class="w3-button w3-display-topright">
+            <i class="fa fa-window-close w3-xxlarge"></i>
+            </span>
+            {{>settingsForm}}
+       
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+  </div>

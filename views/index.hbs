@@ -1,0 +1,79 @@
+
+
+<!-- Header -->
+
+	
+<script>
+	let openTenantPane = function(paneID){
+        let x = document.getElementById(paneID);
+  		if (x.className.indexOf("w3-show") == -1) {
+    		x.className += " w3-show";
+  		} else { 
+    		x.className = x.className.replace(" w3-show", "");
+  		}
+    	}
+
+	let openTenantTab = function(evt, tenantName, tab){
+		let tabs = ['Services', 'Users', 'Accounts']
+		tabs.forEach(tabName => {
+			if(tabName === tab) {
+				document.getElementById(tenantName + tab).style.display = "block"
+				evt.currentTarget.className += ' w3-red'
+			}
+			else{
+				document.getElementById(tenantName + tabName).style.display = "none"
+				document.getElementById(tenantName + tabName + 'TabLink').className = document.getElementById(tenantName + tabName + 'TabLink').className.replace(" w3-red", '')
+			}
+		})
+	}
+
+	let displayUserList = function(userArray){
+		console.log('ye')
+    	}
+
+	let displayTenantAccounts = function(data, tenantName){
+		let accountsDataTableID = `${tenantName}AccountsTableData`
+		if ( $.fn.dataTable.isDataTable( `#${tenantName}AccountsTable`) ) {
+		}
+		else {
+			data.forEach(accountData => {
+				$(`#${accountsDataTableID}`).append(
+				`<tr><td>${accountData.id}</td><td>${accountData.org_name}</td></tr>`)
+			})
+			$(`#${tenantName}AccountsTable`).DataTable({
+        	})
+		}
+	}	
+
+	let getTenantAccounts = function(tenantName){
+	        $.get('/tenants/accounts', {tenantName}, data => displayTenantAccounts(data, tenantName))
+	}
+
+	let getTenantAdmins = function(tenantName){
+        	$.get('/getTenantAdmins', {tenantName}, displayUserList)
+    	}
+
+	let getTenantUsers = function(tenantName){
+        	$.get('/getTenantUsers', {tenantName, role:'admin'}, displayUserList)
+	}
+
+</script>
+
+   <header class="w3-container" style="padding-top:22px">
+     <div class="w3-panel">
+		{{>userGroups/tableDisplay}}
+     </div>
+   </header>
+
+
+	<div class="flex-container">
+		
+		{{>tenantSection/container}}
+
+		<div id="apiInspectSection">
+		{{>apiPageSection/apiList}}	
+		</div>
+	</div>
+
+{{>userListView}}
+

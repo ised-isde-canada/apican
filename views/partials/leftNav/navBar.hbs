@@ -1,0 +1,74 @@
+
+  <!-- Sidebar/menu -->
+<nav    class="w3-sidebar w3-small w3-hide-small w3-hide-medium w3-animate-left w3-center" 
+        id="leftNav">
+
+ <a  id="jiraRequestTest"
+    class="w3-bar-item w3-button w3-padding-large w3-hover-black" >
+    <i class="fa fa-superpowers w3-xxlarge leftNavIcon"></i>
+    <p>Jira Test</p>
+  </a>
+  <a  href="" 
+    class="w3-bar-item w3-button w3-padding-large w3-hover-black" >
+    <i class="fa fa-id-card w3-xxlarge leftNavIcon"></i>
+    <p>Keycloak Test</p>
+  </a>
+
+ <h2>Security</h2> 
+ <a href="/logs" 
+	    class="w3-bar-item w3-button w3-padding-large w3-hover-black">
+      <i class="fa fa-laptop w3-xxlarge leftNavIcon"></i>
+      <p>LOGS</p>
+  </a>
+
+<h2>Groups</h2>
+  <a  ID="manageUsersBtn" 
+    class="w3-bar-item w3-button w3-padding-large w3-hover-black ">
+    <i class="fa fa-users w3-xxlarge leftNavIcon"></i>
+    <p>CREATE</p>
+  </a>
+
+  <a  href="#userMgtSection" 
+    class="w3-bar-item w3-button w3-padding-large w3-hover-black" >
+    <i class="fa fa-eye w3-xxlarge leftNavIcon"></i>
+    <p>SELECTED</p>
+  </a>
+
+
+  {{> leftNav/users}}
+
+
+  <h2>APIs</h2>
+  <a  href="" 
+    class="w3-bar-item w3-button w3-padding-large w3-hover-black" >
+    <i class="fa fa-code w3-xxlarge leftNavIcon"></i>
+    <p>ACTIVE</p>
+  </a>
+  
+  
+   <a  href="" 
+    class="w3-bar-item w3-button w3-padding-large w3-hover-black" >
+    <i class="fa fa-pie-chart w3-xxlarge leftNavIcon"></i>
+    <p>STATS</p>
+  </a>
+    <a ID="apiJSON" onclick="document.getElementById('apiVisibilityModal').style.display='block'" 
+    class="w3-bar-item w3-button w3-padding-large w3-hover-black" >
+    <i class="fa fa-list-alt w3-xxlarge leftNavIcon"></i>
+    <p>VISIBILITY</p>
+    </a>
+
+    {{>modalAPIVisibility/frame}}
+
+   <a  href="" 
+    class="w3-bar-item w3-button w3-padding-large w3-hover-black" >
+    <i class="fa fa-pie-chart w3-xxlarge leftNavIcon"></i>
+    <p>STATS</p>
+  </a>
+  <center>
+    <div id="loadingIndicator" style="display:none">
+    <p>loading</p>
+    <div class="loader"></div>
+    </div>
+  </center>
+
+</nav>
