@@ -36,6 +36,7 @@ require('@server/groups/userGroupFeature').addFeature( app )
 require('@server/server').setAppServer( 	app	)
 require('@server/engine').mountAppEngine( app	)	//returns a promise
 .then(require('@server/db').mountLocalDatabase	)
+
 .then(app => {
 	app.updateTenantInformation()
 	return app

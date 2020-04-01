@@ -3,9 +3,11 @@
 const express = require('express')
 //information on tenants passed to the front end
 const tenantInfo  = app => app.tenants.list.map(t => {
+
    return {
        name: t.name,
        id: t.id
+
       }
    })
 

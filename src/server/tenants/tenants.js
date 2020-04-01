@@ -10,12 +10,6 @@
 "use strict"
 /******************************************************************************/
 
-
-const updateTenantInfo = function() {
-
-  
-}
-
 const TenantProto = require('@tenants/tenantProto').ServiceProvider
 
 class Tenant extends TenantProto {
@@ -48,17 +42,10 @@ class Tenant extends TenantProto {
     }
 }
 
+require('@server/tenants/tenantDocs').activeDocsInterface(Tenant)
 require('@server/tenants/updateServices').addServiceUpdateFeature(Tenant)
 
 
-Tenant.prototype.update =  function(){
-
-    let serviceListingUpdate = null 
-    return Promise.all([this.serviceListingUpdate()])
-    .then( res => {
-        debugger
-    })
-}
 module.exports = {
     Tenant    
 }

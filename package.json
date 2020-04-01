@@ -5,12 +5,14 @@
   "main": "app.js",
   "scripts": {
     "start": "node ./app.js",
+    "buildClient" : "browserify ./src/client/main.js -o ./public/javascripts/bundle.js",
     "devClient": "watchify ./src/client/main.js -o ./public/javascripts/bundle.js",
     "devServer": "nodemon ./app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "_moduleAliases": {
     "@appData": "src/server/appData.js",
+    "@errors": "src/errors.js",
     "@appEngine": "src/server/appEngine",
     "@appRoot": "src/server/routes/appRoot",
     "@express": "src/server/express.js",
@@ -50,6 +52,7 @@
     "node-cron": "^2.0.3",
     "request": "^2.88.0",
     "socket.io": "^2.3.0",
+    "socketio": "^1.0.0",
     "sqlite3": "^4.1.1",
     "underscore": "^1.10.2",
     "uuid": "^7.0.2",
