@@ -12,7 +12,6 @@
 const serviceInspectRoutes = function( app ) {
 
     return {
-        
         list: async function(req, res, next) {
             console.log(app)
             let tenantName  = req.query.tenant

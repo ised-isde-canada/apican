@@ -17,6 +17,15 @@ class Event {
   }
 }
 
+Event.prototype.tick = function(){
+  this.last += 1
+  this.next = this.frequency - this.last
+  if(this.next === 0){
+    this.run()
+    this.last = 0
+    this.next = this.frequency
+  }
+}
 module.exports = {
   Event
 }

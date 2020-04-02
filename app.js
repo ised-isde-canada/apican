@@ -16,7 +16,8 @@
 require('module-alias/register')    //uses aliases to express paths to modules in src
 const path = require('path')
 /*****************************************************************************/
-const app = {
+const app = { 
+
 	metadata : {
 		name			 		: 'apiCan', 
 		root			 		: __dirname, 
@@ -36,8 +37,10 @@ require('@server/groups/userGroupFeature').addFeature( app )
 require('@server/server').setAppServer( 	app	)
 require('@server/services/serviceRouter').addServiceModule( app )
 require('@server/engine').mountAppEngine( app	)	//returns a promise
-.then(require('@server/db').mountLocalDatabase	)
-.then( _=> {
+
+.then(require('@server/db').mountLocalDatabase			 )
+.then(require('@server/process').addProcessStatsFeature)
+.then( _ => {
 	/*	updates the primary information for each tenants
 		and the services the offer								*/
 	return app.updateTenantInformation()
@@ -49,16 +52,9 @@ require('@server/engine').mountAppEngine( app	)	//returns a promise
 		app.say(`${key}:${app.healthCheck[key]}`)
 	})
 
-	let Event = require('@common/time/events').Event
-
-	app.tools.createNewClock("tenant info refresh", new Event({
-		name		: 'tenant info refresh', 
-		frequency	: 10, 
-		run			: app.updateTenantInformation
-	}))
-	
-
+	require('@server/clocks').setClocks( app )
 	require('@server/router').configureRoutes( app )
+	app.clocks.forEach(clock => clock.start())
 	app.server.start()
 	app.say(`${app.metadata.name} now running`)
 })

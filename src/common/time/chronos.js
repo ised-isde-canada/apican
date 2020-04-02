@@ -47,20 +47,11 @@ clock.Clock.prototype.start = function(){
   this.cout(`Clock ${this.id} starting with ${this.events.length} events`)
   this.isOn = true
 }
-
+ 
 clock.Clock.prototype.update = function( appTime ){
   this.clockTime += 1
-  this.events.forEach( event => {
-    event.last += 1
-    event.next = event.frequency - event.last
-    if(event.next === 0){
-      event.run()
-      event.last = 0
-      event.next = event.frequency
-    }
-  })
-  this.cout( `app has been running for ${this.clockTime} min(s)`)
-}
+  this.events.forEach( event => event.tick() )
+} 
 
 clock.Clock.prototype.addEvent = function( event ){
 }
@@ -92,10 +83,10 @@ const addRecurringEventsFeature = function( app ){
 const addTimerFeature = function( app ){
   app.clocks = new Map()
   app.tools = {
-    createNewClock  :  label =>{
+    createNewClock  :  (label, events) =>{
       app.clocks.set(label, new clock.Clock({
         cout: app.say, 
-        events: app.recurringEvents
+        events
       })
     )}
   }

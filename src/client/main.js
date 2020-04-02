@@ -33,8 +33,11 @@ $(function() {
         containerID: 'tenantCards'
     })
 
-    .then( app => {
-        debugger
+    .then( app => {  
+        app.featureSystem.addComponent({
+            label: 'userGroupManagement'
+        })
+        require('./ui/main').addUiComponent( app )
     })    
   
 
