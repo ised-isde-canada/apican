@@ -34,14 +34,15 @@ require('@tenants/tenantsManager').addTenantManagementModule( app )
 require('@common/time/chronos').addTimerFeature( app )
 require('@server/groups/userGroupFeature').addFeature( app )
 require('@server/server').setAppServer( 	app	)
+require('@server/services/serviceRouter').addServiceModule( app )
 require('@server/engine').mountAppEngine( app	)	//returns a promise
 .then(require('@server/db').mountLocalDatabase	)
-
-.then(app => {
-	app.updateTenantInformation()
-	return app
+.then( _=> {
+	/*	updates the primary information for each tenants
+		and the services the offer								*/
+	return app.updateTenantInformation()
 })
-.then( app => { //run the app
+.then( _ => { //run the app
 
 	app.say("******* App component status:")
 	Object.keys(app.healthCheck).forEach( key=> {

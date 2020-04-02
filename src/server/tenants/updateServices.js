@@ -14,15 +14,17 @@ const addServiceUpdateFeature = function(Tenant){
         service => service.service.id
      )
 
-    this.services.forEach((_, serviceID) => {
+     this.services.forEach(( _, serviceID) => {
         if (!currentServiceIDs.includes(serviceID)) { //found one shouldn't be in here
             if (!'servicesToRemove' in updateReport) updateReport.servicesToRemove = []
             updateReport.servicesToRemove.push(serviceID)
         }
         })
 
-        log(`updating ${fetchedServices.length} service definitions for ${this.name}`)
-        fetchedServices.forEach( service => this.services.updateServiceDefinition(service.service, updateReport))
+        console.log(`updating ${fetchedServices.length} service definitions for ${this.name}`)
+        fetchedServices.forEach( service => {
+            return this.services.updateServiceDefinition(service.service, updateReport)
+        })
         return updateReport
     }
 
@@ -49,7 +51,6 @@ const addServiceUpdateFeature = function(Tenant){
                 }
             })
     
-    
         return tenantUpdateReport
     }
 
@@ -72,9 +73,10 @@ const addServiceUpdateFeature = function(Tenant){
             this.updateActiveDocs( tenantUpdateReport )  ])
 
         .then( updateResult  => {
-            return this.validateAPIs(tenantUpdateReport)
-            debugger
+            this.validateAPIs(tenantUpdateReport)
+            return tenantUpdateReport
         })
+
     }
 }
 

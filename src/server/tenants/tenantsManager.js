@@ -24,9 +24,6 @@ const updateTenantInformation = ( app, tenantsList = null ) => {
     return Promise.all(tenantsToUpdate.map(tenant => {
             return tenant.update()
         }))
-        .then( updateReports => {
-            debugger
-        })
 }
 
 

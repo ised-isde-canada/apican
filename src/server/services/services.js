@@ -9,8 +9,35 @@
  *
  ******************************************************************************/
 "use strict"
+/******************************************************************************/
 const errors = require('@errors').errors
 const DocumentationSet  = require('@server/services/documentationSet').DocumentationSet
+
+/******************************************************************************/
+
+
+const services = {
+
+      codes: {
+            updateServiceFeaturesOk: "update service feature ok",
+            updateServiceFeaturesNotOk: "update service feature not ok"
+        },
+
+        updateOk: function(serviceID) {
+            return {
+                serviceID: serviceID,
+                updated: 'ok'
+            }
+        },
+
+        updateNotOk: function(serviceID, err) {
+            return {
+                serviceID: serviceID,
+                updated: 'not ok',
+                err: err
+            }
+        }
+}
 
 class ServiceDocumentation {
     constructor(serviceID) {
@@ -98,6 +125,20 @@ Service.prototype.addDocumentationSet = function(docObj, tenantUpdateReport) {
         if(this.documentation.size === 2) this.publishable = true
     }
 
+}
+
+Service.prototype.updateDefinition = function(defObj) {
+    try {
+        if (typeof(defObj) === 'object' &&
+            'id' in defObj &&
+            defObj.id === this.id) {
+
+            Object.assign(this, defObj)
+            return services.updateOk(this.id)
+        }
+    } catch (err) {
+        return services.updateNotOk(this.id, err)
+    }
 }
 
 module.exports = {
