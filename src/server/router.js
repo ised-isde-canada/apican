@@ -35,6 +35,7 @@ const configureRoutes = function( app ) {
 
    app.server.express.use('/userGroups', app.userGroups.router)
    app.server.express.use('/services', app.services.router)
+   app.server.express.use('/events', app.eventsRegistrar.router)
    //routing to the top level app
     let router = express.Router()     
     app.server.express.use('/', router)

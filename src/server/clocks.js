@@ -13,6 +13,19 @@
 /*****************************************************************************/
 const Event = require('@common/time/events').Event
 
+
+const updateTenantInformation = function( app ){
+
+   app.server.io.emit('updateBottomStatusInfo', {
+      serverStatus: `updating tenant information` 
+   })
+   app.updateTenantInformation()
+
+   app.server.io.emit('updateBottomStatusInfo', {
+      serverStatus: `finished updating tenant information` 
+   })
+ 
+}
 /* clock that updates various 
    information related to tenants  */
 const setTenantUpdateClock = function( app ){
@@ -20,7 +33,7 @@ const setTenantUpdateClock = function( app ){
    [  new Event({
 		   name		   : 'tenant info refresh', 
 		   frequency	: 10, 
-		   run			: app.updateTenantInformation
+		   run			: _ => updateTenantInformation( app )
       })
    ])
 }
@@ -30,13 +43,18 @@ const setTenantUpdateClock = function( app ){
 const setAliveClock = function( app ){
 
    let showLife = function(){
-      app.processStats.update()
+      app.processStats.update() 
       .then( _ => {
+
+         app.server.io.emit('updateBottomStatusInfo', {
+            serverStatus: `app alive time: ${app.processStats.elapsed}` 
+         })
+
          app.say([
             `time: ${app.processStats.elapsed}`,
             `memory: ${app.processStats.memory}`,
             `cpu: ${app.processStats.cpu}`
-         ].join("\n"))
+            ].join("\n"))
       })
    }
 

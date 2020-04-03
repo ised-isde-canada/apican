@@ -19,11 +19,12 @@ const path = require('path')
 const app = { 
 
 	metadata : {
-		name			 		: 'apiCan', 
-		root			 		: __dirname, 
+		name	: 'apiCan', 
+		root	: __dirname, 
 		staticFolderPath 	:  path.join(__dirname, 'public') ,
 		localDatabaseName	: 'settings.db', 
-	}, 
+	},
+
 	healthCheck : {
 		localDatabase : false
 	}
@@ -34,16 +35,17 @@ require('@server/appData').getAppData( app )
 require('@tenants/tenantsManager').addTenantManagementModule( app )
 require('@common/time/chronos').addTimerFeature( app )
 require('@server/groups/userGroupFeature').addFeature( app )
-require('@server/server').setAppServer( 	app	)
+require('@server/server').setAppServer( app )
 require('@server/services/serviceRouter').addServiceModule( app )
-require('@server/engine').mountAppEngine( app	)	//returns a promise
+require('@server/engine').mountAppEngine( app )	//returns a promise
 
-.then(require('@server/db').mountLocalDatabase			 )
-.then(require('@server/process').addProcessStatsFeature)
+.then( require( '@server/db').mountLocalDatabase )
+.then( require( '@server/process').addProcessStatsFeature )
+.then( require('@common/time/moduleEventsRegister').addModule( app ))
 .then( _ => {
+	return app.updateTenantInformation()
 	/*	updates the primary information for each tenants
 		and the services the offer								*/
-	return app.updateTenantInformation()
 })
 .then( _ => { //run the app
 

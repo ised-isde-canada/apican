@@ -5,8 +5,7 @@
  * -------------------------------------
  *  Canadian Gov. API Store middleware - client side
  *
- *  ui feature
- *
+ *  ui feature for bottom status bar of client app
  ******************************************************************************/
 "use strict"
 /******************************************************************************/
@@ -14,11 +13,37 @@
 /******************************************************************************/
 
 
-const addFeature = function( app ){
-    app.socket.on('updateBottomStatusInfo', function(data) {
-        $('#bottomStatusBar').text(data.message)
+const bottomStatusBar = function( app ){
+
+    let msgs = {
+        clientStatus: 'client loaded', 
+        serverStatus: 'waiting for message', 
+        queryStatus: 'N/A'
+    } 
+
+    let updateTicker = () => {
+        let statusBarContent = [
+            `client: ${msgs.clientStatus}`, 
+            `server: ${msgs.serverStatus}`, 
+            `query: ${msgs.queryStatus}`
+        ].join(' | ')
+        $('#bottomStatusBar').text(statusBarContent)
+    }
+
+    app.socket.on('updateBottomStatusInfo', function( data ) {
+        if('serverStatus' in data){
+            msgs.serverStatus = data.serverStatus
+        }
+        updateTicker()
     })
-    return app 
+
+    updateTicker()
+    return app
+}
+
+
+const addFeature = function( app ){
+    return bottomStatusBar(app)
 }
 
 module.exports = {

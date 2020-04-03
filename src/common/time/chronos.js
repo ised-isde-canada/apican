@@ -84,10 +84,13 @@ const addTimerFeature = function( app ){
   app.clocks = new Map()
   app.tools = {
     createNewClock  :  (label, events) =>{
+      if('eventsRegistrar' in app){
+        events.forEach( app.eventsRegistrar.register )
+      }
       app.clocks.set(label, new clock.Clock({
         cout: app.say, 
         events
-      })
+        })
     )}
   }
   return app

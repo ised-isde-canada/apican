@@ -26,6 +26,7 @@ Event.prototype.tick = function(){
     this.next = this.frequency
   }
 }
+
 module.exports = {
   Event
 }

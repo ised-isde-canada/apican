@@ -100,7 +100,10 @@ const uiFeature = function( app ){
 
 const addUiComponent = function(app) {
 
-    app.featureSystem.addComponent({label: 'ui', methods: uiFeature(app)})
+    app.featureSystem.addComponent({
+            label: 'ui', 
+            methods: uiFeature(app)
+    })
     _initStaticUI()
 
     app.showVisibleAPITable = function(tenant, event) {
@@ -117,6 +120,10 @@ const addUiComponent = function(app) {
         }
     require('./bottomStatusBar').addFeature( app )
     require('./dataExchangeStatus').addDEStatusFeature( app )
+    require('./modal').addModalFeature( app )
+    require('./forms').addFormFeature( app )
+    require('./dataTables').addDataTableFeature( app )   
+    require('./userList').addUserListFeature( app )
     return app
 }
 

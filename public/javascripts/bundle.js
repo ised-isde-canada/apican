@@ -4610,6 +4610,127 @@
  * -------------------------------------
  *  Canadian Gov. API Store middleware - client side
  *
+ *  adminTools.js: manages admin tools 
+ *
+ ******************************************************************************/
+"use strict"
+/******************************************************************************/
+const eventPane = ({
+    name,
+    frequency,
+    last,
+    next
+}) => {
+    return [
+        `<tr>`,
+        `<td>${name}</td>`,
+        `<td>${frequency} mins</td>`,
+        `<td>${last}</td>`,
+        `<td>${next}</td>`,
+        `</tr>`
+    ].join(' ')
+}
+
+
+const eventScheduler = (function(){
+
+	let _events = new Map()
+    let _getEvents = () => {
+        return new Promise((resolve, reject) => {
+
+            $.get('/events', function(data) {
+                return resolve(data)
+            })
+
+            .fail( err => {
+                return reject(err) 
+            })
+        })
+    }
+
+
+	return {
+
+		update : function(eventArray) {
+            return _getEvents()
+            .then( events => {
+			    events.forEach(ev => {
+					_events.set(ev.id, ev)
+			    })
+                return 'Ok'
+		    })
+        }, 
+
+		showScheduler : function( ){
+			 let eventRows = ""
+			 _events.forEach((ev, _) =>{
+				eventRows = eventRows += eventPane(ev) 
+			 })
+	         return [
+					 `<div class="eventList" id="eventList">`,
+                     `<table class='w3-table scheduledEvent'>`,
+                     `<tr><th>Event Name</th><th>Frequency</th><th>Last</th><th>Next</th></tr>`,
+					  eventRows, 
+                     `</table>`,
+                     '</div>'
+			 		].join('')
+		}
+	}
+
+})()
+
+
+const schedulerContent = function() {
+    debugger
+    return schedulerModalContent()
+        .then(modalContent => {
+            return ({
+                title: 'Scheduler',
+                content: modalContent
+            })
+        })
+        .catch(err => {
+            throw err
+        })
+}
+
+
+const addAdminTools = async function(clientApp) {
+
+    clientApp.eventScheduler = eventScheduler
+
+    clientApp.showScheduler = _ => clientApp.showModal({
+	    title : 'events', 
+	    content: eventScheduler.showScheduler()
+    })
+
+    $('#showScheduler').click(event => {
+        event.preventDefault()
+        eventScheduler.update()
+        .then( _ => {
+           clientApp.showScheduler() 
+        })  
+    })
+
+    clientApp.featureSystem.add({
+        label: 'eventScheduler', 
+        state: 'implemented'
+       })
+}
+
+
+module.exports = {
+    addAdminTools
+}
+
+},{}],3:[function(require,module,exports){
+/*******************************************************************************
+ * Franck Binard, ISED (FranckEinstein90)
+ *
+ * APICan application - 2020
+ * -------------------------------------
+ *  Canadian Gov. API Store middleware - client side
+ *
  *  main.js: entry point 
  *
  ******************************************************************************/
@@ -4638,14 +4759,19 @@ $(function() {
         containerID: 'tenantCards'
     })
 
-    .then( app => {
-        debugger
+    .then( app => {  
+        app.featureSystem.addComponent({
+            label: 'userGroupManagement'
+        })
+        require('./ui/main').addUiComponent( app )
+        require('./events/main').addAdminTools( app )
+
     })    
   
 
 })
 
-},{"../common/features":4,"./tenants":3}],3:[function(require,module,exports){
+},{"../common/features":12,"./events/main":2,"./tenants":4,"./ui/main":9}],4:[function(require,module,exports){
 /*******************************************************************************
  * Franck Binard, ISED (FranckEinstein90)
  *
@@ -4739,7 +4865,399 @@ module.exports = {
    addTenantCollection 
 }
 
-},{"moment":1}],4:[function(require,module,exports){
+},{"moment":1}],5:[function(require,module,exports){
+/*******************************************************************************
+ * Franck Binard, ISED (FranckEinstein90)
+ *
+ * APICan application - Feb 2020
+ * -------------------------------------
+ *  Canadian Gov. API Store middleware - client side
+ *
+ *  ui feature for bottom status bar of client app
+ ******************************************************************************/
+"use strict"
+/******************************************************************************/
+
+/******************************************************************************/
+
+
+const bottomStatusBar = function( app ){
+
+    let msgs = {
+        clientStatus: 'client loaded', 
+        serverStatus: 'waiting for message', 
+        queryStatus: 'N/A'
+    } 
+
+    let updateTicker = () => {
+        let statusBarContent = [
+            `client: ${msgs.clientStatus}`, 
+            `server: ${msgs.serverStatus}`, 
+            `query: ${msgs.queryStatus}`
+        ].join(' | ')
+        $('#bottomStatusBar').text(statusBarContent)
+    }
+
+    app.socket.on('updateBottomStatusInfo', function( data ) {
+        if('serverStatus' in data){
+            msgs.serverStatus = data.serverStatus
+        }
+        updateTicker()
+    })
+
+    updateTicker()
+    return app
+}
+
+
+const addFeature = function( app ){
+    return bottomStatusBar(app)
+}
+
+module.exports = {
+    addFeature
+}
+
+},{}],6:[function(require,module,exports){
+"use strict"
+
+
+const dataExchangeStatus = (function() {
+
+    let dataLoading = false
+    return {
+        setLoading: function() {
+            dataLoading = true
+            document.getElementById('loadingIndicator').style.display = 'block'
+        },
+        setInactive: function() {
+            dataLoading = false
+            document.getElementById('loadingIndicator').style.display = 'none'
+        }
+    }
+
+})()
+
+const addDEStatusFeature = function( app ){
+    app.ui.setLoading = dataExchangeStatus.setLoading
+    app.ui.setInactive = dataExchangeStatus.setInactive
+}
+
+module.exports = {
+    addDEStatusFeature
+}
+
+},{}],7:[function(require,module,exports){
+"use strict"
+
+const dataTables = function( app ){
+      
+   let _dataTables = new Map()  
+   let _tableID = 0
+
+   let _buildTable = (htmlID, fields) => {
+      let bodyHtmlId = htmlID + 'content'
+         $(`#${htmlID}`).append([
+            '<thead><tr><th>', 
+            fields.map(field => field.label).join('</th><th>'), 
+            '</th></tr></thead>', 
+            `<tbody id='${bodyHtmlId}'> </tbody>`].join(''))
+   } 
+
+   return {
+
+      newTable : function({ htmlID, fields, options}){
+            _buildTable(htmlID, fields)
+            let dt = $(`#${htmlID}`).DataTable(options)
+            _tableID += 1
+            _dataTables.set(_tableID , {
+               htmlID,
+               dtObject: dt,
+               fields
+            })
+            return _tableID 
+      }, 
+
+      empty : function( tableID ) {
+         let dt = _dataTables.get(tableID).dtObject
+         dt.clear().draw()
+      }, 
+      
+      getRowData : function({ tableID, dataRow }){
+         let table = _dataTables.get(tableID).dtObject
+         return table.row(dataRow).data()
+      },  
+
+      addRow : function({tableID, info}){
+         let table    = _dataTables.get(tableID)
+         let tableRow = table.fields.map( field => {
+            return (field.id in info) ? info[field.id] : 'N/A'
+         })
+         table.dtObject.row.add(tableRow).draw(false)
+      }
+   }
+}
+
+
+const addDataTableFeature = function( app ){
+   app.ui.dataTables = dataTables(app)
+   return app
+}
+module.exports = {
+    addDataTableFeature
+}
+
+
+},{}],8:[function(require,module,exports){
+/*****************************************************************************/
+"use strict"
+/*****************************************************************************/
+
+const formFeature = function( app ){
+    
+    let formIDs = new Map()
+
+    return {
+
+      form : function( formContent, submit){
+        return [
+            `<form class="w3-container w3-left-align">`, 
+                formContent, 
+                `<div class="w3-row" style='margin:15,15,15,15'>`, 
+                    `<br/>`, 
+                    `<button class="w3-btn w3-blue w3-block" id="${submit.ID}" >`, 
+                        `${submit.label}`, 
+                    `</button>`, 
+                    `<br/>`, 
+                `</div>`,
+            `</form>`].join('')
+        }
+    }
+}
+
+const addFormFeature = function( app ){
+    let forms = formFeature( app ) 
+    app.ui.form = forms.form
+}
+
+module.exports = {
+    addFormFeature
+}
+
+},{}],9:[function(require,module,exports){
+/*******************************************************************************
+ * Franck Binard, ISED (FranckEinstein90)
+ *
+ * APICan application - Feb 2020
+ * -------------------------------------
+ *  Canadian Gov. API Store middleware - client side
+ *
+ *  ui.js: entry point 
+ *
+ ******************************************************************************/
+"use strict"
+/******************************************************************************/
+/******************************************************************************/
+
+
+let _initStaticUI = function(){
+    $('#appStatus').click(function( event ) {
+        this.classList.toggle("active")
+        let statusDetailPaneHeight = $('#appStatusDetail').css('maxHeight')	
+        if( statusDetailPaneHeight === '0px' ){
+            let scrollHeight = $('#appStatusDetail').css('scrollHeight')
+            $('#appStatusDetail').css('maxHeight', '80px')
+        } else {
+            $('#appStatusDetail').css('maxHeight', '0px')
+        }
+    }) 
+}
+
+const uiFeature = function( app ){
+
+    let formInputField = function({
+            label, 
+            inputField
+        }){  //creates an input field
+             return [   
+                `<label class="groupCreationLabel"><b>${label}</b></label>`, 
+                inputField
+             ].join('')
+    }
+
+    return {
+
+
+        addUiTrigger: function({ triggerID, action }){
+          let triggers = null
+          if(!Array.isArray(triggerID)){
+            triggers = [triggerID]
+          } else {
+            triggers = triggerID
+          }		    
+          triggers.forEach( triggerID => $(`#${triggerID}`).click( action ))
+        }, 
+
+		hidden : function({
+				htmlID, 
+				value
+		  }){
+				return `<input type='hidden' id="${htmlID}" name="${htmlID}" value="${value}">`
+		  },
+
+		textArea  : function({
+				label, 
+				htmlID, 
+				value
+		  }){
+				let textAreaField = formInputField({
+				 	 label, 
+					 inputField: [ `<textarea rows='4' cols='50' class="w3-input w3-border" `, 
+						  			`id="${htmlID}">${value}</textArea>`
+						  			 ].join('')
+				})
+				return textAreaField
+		  }, 
+
+        textField : function({
+            label, 
+            htmlID, 
+            value
+        }){
+            let textField = formInputField({ 
+                label, 
+                inputField: `<input class="w3-input w3-border" id="${htmlID}" value="${value || ''}" type="text">`
+           })
+            return textField
+        }, 
+
+        checkBox: function({
+            label, 
+            htmlID, 
+            checked
+        }){
+            return [
+                `<input class="w3-check" id='${htmlID}' type="checkbox" `, 
+                `${checked?'checked="${checked}"':''}>`, 
+                `<label class="groupCreationLabel">${label}</label>`
+            ].join('')
+        }
+   }
+}
+
+const addUiComponent = function(app) {
+
+    app.featureSystem.addComponent({
+            label: 'ui', 
+            methods: uiFeature(app)
+    })
+    _initStaticUI()
+
+    app.showVisibleAPITable = function(tenant, event) {
+       $('.tenantsVisibleAPI').hide()
+       let apiPaneID = tenant + 'VisibleAPI'
+       $('#' + apiPaneID).show()
+    }
+
+    app.ui.scrollToSection = function(sectionID) {
+            let hash = $('#' + sectionID)
+            $('html, body').animate({
+                scrollTop: hash.offset().top
+            }, 800, _ => window.location.hash = hash)
+        }
+    require('./bottomStatusBar').addFeature( app )
+    require('./dataExchangeStatus').addDEStatusFeature( app )
+    require('./modal').addModalFeature( app )
+    require('./forms').addFormFeature( app )
+    require('./dataTables').addDataTableFeature( app )   
+    require('./userList').addUserListFeature( app )
+    return app
+}
+
+module.exports = {
+   addUiComponent 
+}
+
+},{"./bottomStatusBar":5,"./dataExchangeStatus":6,"./dataTables":7,"./forms":8,"./modal":10,"./userList":11}],10:[function(require,module,exports){
+"use strict"
+
+
+const showModal = ({
+
+    title, 
+    content
+
+  }) =>{
+
+    $('#modalTitle').text( title )
+    $('#modalContent').html( content )
+    document.getElementById('modalWindow').style.display = 'block'
+}
+
+const hideModal = () =>{
+    $('#modalTitle').text( "" )
+    $('#modalContent').html( "" )
+    document.getElementById('modalWindow').style.display = 'hidden'
+}
+
+const userInfo = msg => {
+     $('#userInfo').html( msg )
+     document.getElementById('userInfoModal').style.display = 'block'
+}    
+
+
+const addModalFeature = function( app ){
+
+    app.featureSystem.add({
+        label : 'showModal', 
+        method: showModal
+    })
+
+    app.ui.modal = showModal, 
+    app.ui.hideModal =  hideModal
+    app.ui.userInfo = userInfo
+
+    return app
+}
+
+module.exports = {
+    addModalFeature
+}
+
+},{}],11:[function(require,module,exports){
+"use strict"
+
+
+const addUserListFeature = function( app ){
+
+    let tableID = app.ui.dataTables.newTable({
+            htmlID: 'groupMembersTable', 
+            fields: [
+                { id: 'username', label: 'User' }, 
+                { id: 'email', label: 'email'  },
+                { id: 'created_at', label: 'Creation Date'}, 
+                { id: 'keyCloackAccount', label: 'keyCloak'}, 
+                { id: 'twoFactorAuth', label: 'twoFactorAuth'}
+            ],
+            options: {}
+    })
+
+    app.ui.userDisplayUI = { 
+        empty : _ => app.ui.dataTables.empty( tableID )
+    }
+
+    app.ui.userDisplayUI.addRow = function(user){
+        app.ui.dataTables.addRow({
+            tableID, 
+            info: user
+        })
+    }
+}
+module.exports = {
+    addUserListFeature
+}
+
+},{}],12:[function(require,module,exports){
 /*******************************************************************************
  * Franck Binard, Innovation Science and Economic Development Canada (ISED)
  * franck.binard@canada.ca
@@ -4844,4 +5362,4 @@ const addFeatureSystem = function( app ){
 module.exports = {
     addFeatureSystem
 }
-},{}]},{},[2]);
+},{}]},{},[3]);

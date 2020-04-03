@@ -6,11 +6,10 @@
  *  Canadian Gov. API Store middleware - client side
  *
  *  main.js: entry point 
- *
  ******************************************************************************/
 "use strict"
-
 /******************************************************************************/
+
 /******************************************************************************/
 
 
@@ -38,6 +37,8 @@ $(function() {
             label: 'userGroupManagement'
         })
         require('./ui/main').addUiComponent( app )
+        require('./events/main').addAdminTools( app )
+
     })    
   
 

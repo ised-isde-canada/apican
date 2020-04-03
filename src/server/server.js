@@ -67,11 +67,9 @@ const _httpServer = function( app ) {
     return {
 
         start   : function(){
-            _server.listen(app.server.port, err => {
-
-            })
+           _server.listen(app.server.port, err => {
+           })
            app.say(`App running on port ${app.server.port}`)
-           
            return app 
         }
     }
